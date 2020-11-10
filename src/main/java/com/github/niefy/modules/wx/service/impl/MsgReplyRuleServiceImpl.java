@@ -22,16 +22,20 @@ public class MsgReplyRuleServiceImpl extends ServiceImpl<MsgReplyRuleMapper, Msg
     @Autowired
     MsgReplyRuleMapper msgReplyRuleMapper;
 
+    private static final String MATCH_KEY_SUBSCRIBE="subscribe";
+
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         String matchValue = (String) params.get("matchValue");
         String appid = (String) params.get("appid");
+        String type=(String) params.get("type");
         IPage<MsgReplyRule> page = this.page(
             new Query<MsgReplyRule>().getPage(params),
             new QueryWrapper<MsgReplyRule>()
+                    .eq("type",type)
                     .eq(!StringUtils.isEmpty(appid), "appid", appid)
-                    .or()
-                    .apply("appid is null or appid = ''")
+//                    .or()
+//                    .apply("appid is null or appid = ''")
                     .like(!StringUtils.isEmpty(matchValue), "match_value", matchValue)
                     .orderByDesc("update_time")
         );
@@ -98,6 +102,11 @@ public class MsgReplyRuleServiceImpl extends ServiceImpl<MsgReplyRuleMapper, Msg
                 .filter(rule->null == rule.getEffectTimeEnd() || rule.getEffectTimeEnd().toLocalTime().isAfter(now)) // 检测是否在有效时段，effectTimeEnd为null则一直有效
                 .filter(rule->isMatch(exactMatch || rule.isExactMatch(),rule.getMatchValue().split(","),keywords)) //检测是否符合匹配规则
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public MsgReplyRule getByAppId(String appid) {
+        return getMatchedRules(appid,true,MATCH_KEY_SUBSCRIBE).stream().findFirst().get();
     }
 
     /**

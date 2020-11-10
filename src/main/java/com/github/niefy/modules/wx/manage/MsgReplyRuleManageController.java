@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import me.chanjar.weixin.mp.api.WxMpService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import com.github.niefy.modules.wx.entity.MsgReplyRule;
@@ -56,6 +57,13 @@ public class MsgReplyRuleManageController {
         MsgReplyRule msgReplyRule = msgReplyRuleService.getById(ruleId);
 
         return R.ok().put("msgReplyRule", msgReplyRule);
+    }
+
+    @GetMapping("/subscribe")
+    public R subscribe(@CookieValue String appid){
+        MsgReplyRule msgReplyRule=msgReplyRuleService.getByAppId(appid);
+
+        return R.ok().put("msgReplyRule",msgReplyRule);
     }
 
     /**

@@ -26,12 +26,22 @@ public class MsgReplyRule implements Serializable {
     private String appid;
     @NotEmpty(message = "规则名称不得为空")
     private String ruleName;
+    private String type;
     @NotEmpty(message = "匹配关键词不得为空")
     private String matchValue;
-    private boolean exactMatch;
     private String replyType;
+    private String reqType;
+    private boolean exactMatch;
     @NotEmpty(message = "回复内容不得为空")
     private String replyContent;
+    private String repMediaId;
+    private String repName;
+    private String repDesc;
+    private String repUrl;
+    private String repHqUrl;
+    private String repThumbMediaId;
+    private String repThumbUrl;
+    private String content;
     @TableField(value = "`status`")
     private boolean status;
     @TableField(value = "`desc`")

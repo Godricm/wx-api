@@ -48,4 +48,11 @@ public interface MsgReplyRuleService extends IService<MsgReplyRule> {
      * @return 规则列表
      */
     List<MsgReplyRule> getMatchedRules(String appid, boolean exactMatch, String keywords);
+
+    /**
+     * 获取公众号号关注时回复
+     * @param appid
+     * @return
+     */
+    MsgReplyRule getByAppId(String appid);
 }
